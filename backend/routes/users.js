@@ -1,5 +1,11 @@
 const router  = require("express").Router();
-const { userRegister, userLogin } = require("../utils/Auth");
+const { 
+    userRegister,
+    userLogin,
+    userAuth,
+    serializeUser,
+    checkRole
+    } = require("../utils/Auth");
 
 
 // Readers Registration Route
@@ -34,15 +40,49 @@ router.post("/login-admin",async(req,res) => {
 
 //Profile Route
 
-router.get("/profile", async(req,res) => {});
+router.get("/profile",userAuth, async(req,res) => {
+   return res.send(serializeUser(req.user));
+});
 
 // Readers Protected Route
-router.post("/reader-protected",async(req,res) => {});
+router.get(
+    "/reader-protected",
+    userAuth,
+    checkRole(['reader']),
+    async(req,res) => {
+        return res.send("Hello Readers");
+    }
+    );
 
 // Writers Protected Route
-router.post("/writer-protected",async(req,res) => {});
+router.get(
+    "/writer-protected",
+    userAuth,
+    checkRole(['writer']),
+    async(req,res) => {
+        return res.send("Hello Writers");
+    }
+    );
 
 // Admin Protected Route
-router.post("/admin-protected",async(req,res) => {});
+router.get(
+    "/admin-protected",
+    userAuth,
+    checkRole(['admin']),
+    async(req,res) => {
+        return res.send("Hello Admin");
+    }
+    );
+
+// Admin and writer both can access
+router.get(
+    "/admin-writer-protected",
+    userAuth,
+    checkRole(['admin','writer']),
+    async(req,res) => {
+        return res.send("Hello Writers and Admin");
+    }
+    );
+
 
 module.exports = router;

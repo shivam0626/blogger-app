@@ -1,9 +1,11 @@
 const bcrypt = require("bcryptjs");
 const User =  require("../models/User.model");
 const jwt = require("jsonwebtoken");
-const {SECRET} = require("../config")
+const {SECRET} = require("../config");
+const passport = require("passport");
 
-/***
+
+/**
  * @DESC To register  the user (reader,writer,admin)
  */
 
@@ -51,7 +53,7 @@ const userRegister = async(userDets,role,res) =>{
    }
 };
 
-/***
+/**
  * @DESC to login the user(READER,WRITER,ADMIN)
  */
 
@@ -91,7 +93,7 @@ const userLogin = async(userCreds, role,res) =>{
             role: user.role,
             email: user.email,
             token: `Bearer ${token}`,
-            expiresIn: 168
+            expiresIn: "168 hours"
         };
 
         return res.status(200).send({
@@ -108,8 +110,23 @@ const userLogin = async(userCreds, role,res) =>{
     }
 };
 
+/**
+ *@DESC Passport Middleware
+ */
+
+const userAuth = passport.authenticate("jwt",{session:false});
+
+/**
+ *@DESC Check role middleware
+ */
+
+const checkRole = (roles) => (req,res,next) =>{
+    !roles.includes(req.user.role)
+    ? res.status(401).send("Unauthorized")
+    : next() ;
+}
 const validateUsername = async(username) =>{
-    let user = await User.findOne({username});
+    let user = await User.findOne({username}); 
     return user ? false: true;
 };
 
@@ -118,7 +135,19 @@ const validateEmail = async(email) =>{
     return user ? false: true;
 };
 
+const serializeUser = (user) =>{
+    return{
+        username: user.username,
+        email: user.email,
+        name: user.name,
+        _id: user._id
+    }
+}
+
 module.exports = {
     userRegister,
-    userLogin
+    userLogin, 
+    userAuth,
+    serializeUser,
+    checkRole
 };
