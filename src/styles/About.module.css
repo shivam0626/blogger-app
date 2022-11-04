@@ -1,0 +1,19 @@
+@import url('https://fonts.googleapis.com/css2?family=Caveat:wght@700&family=Pacifico&family=Shadows+Into+Light&display=swap');
+.aboutBox{
+    background-color: azure;
+    height: 29rem;
+    border-bottom: 2px solid black;
+    border-top: 2px solid black;
+    margin-top: 4rem;
+}
+.Box1{
+    border-right: 2px solid black;
+    text-align: justify;
+    color: black;
+    padding: 4rem 3rem;
+    font-family: cursive;
+    font-size: 1rem;
+}
+.img{
+   margin-top: 0.3rem;
+}

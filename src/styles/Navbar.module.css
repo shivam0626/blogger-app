@@ -1,0 +1,19 @@
+.navBox{
+    display: flex;
+    justify-content: space-between;
+    font-family: 'Shadows Into Light', cursive;
+    background-color:rgba(182, 3, 3, 0.667);
+    color:azure;
+}
+.links{
+    display: flex;
+    gap: 2rem;
+    margin: 2rem;
+    font-size: 1.2rem;
+    font-weight: 500;
+}
+.logo{
+    margin: 1rem;
+    font-family: 'Shadows Into Light', cursive;
+    font-size: 2.5rem;
+}
